@@ -20,6 +20,7 @@ import os
 import tornado.options
 from tornado.options import define,options
 from handlers import auth
+import redis
 
 BASE_DIRS = os.path.dirname(__file__)
 define('port',default=8000,help='listen port',type=int)
@@ -47,17 +48,32 @@ define('port',default=8000,help='listen port',type=int)
 class Application(tornado.web.Application):
     def __init__(self):
         handlers =[
-         ('/index',main.IndexHandler),
-         ('/explorer',main.ExplorerHandler),
-         ('/post/(?P<post_id>[0-9]+)',main.PostHandler),
-         ('/upload',main.UploadHandler),
-         (r'/login',auth.LoginHandler),
+            ('/index',main.IndexHandler),
+            ('/explorer',main.ExplorerHandler),
+            ('/post/(?P<post_id>[0-9]+)',main.PostHandler),
+            ('/upload',main.UploadHandler),
+            (r'/login',auth.LoginHandler),
+            (r'/logout',auth.LogoutHandler),
+            (r'/signup',auth.SignUpHandler)
         ]
+
         settings ={
             'debug' :True,
             'template_path':'templates',
-            'static_path':'static'
-        }
+            'static_path':'static',
+            'login_url':'/login',
+            'cookie_secret': 'GENERATE_YOUR_OWN_RANDOM_VALUE_HERE',
+            'pycket' :{
+            'engine': 'redis',
+            'storage': { 'host': 'localhost',
+                           'port': 6379,
+                          # 'password': '',
+                           'db_sessions': 5,  # redis db index
+                           'db_notifications': 11,
+                           'max_connections': 2 ** 30,},
+            'cookies': {'expires_days': 30,},
+                       }
+                 }
 #super 重写父类方法。但是又要用父类，前面的方法为父类的方法，将父类的__init__方法重写后将handlers,setting作为参数传给Application.
 # **setting :对settings进行解包,相当于super(Application,self).__init__(handlers,debug = True,template_path = 'templates',static_path = 'static')
         super(Application,self).__init__(handlers,**settings)

@@ -2,9 +2,21 @@ import tornado
 import os,glob
 from tornado.web import RequestHandler
 from utils import makephoto
+import pycket
+from pycket.session import SessionMixin
+
+class BaseHandler(RequestHandler,SessionMixin):
+    def get_current_user(self):
+        current_user = self.session.get('ID',None)
+        if current_user:
+            return current_user
+        else:
+            return None
 
 
-class IndexHandler(RequestHandler):
+class IndexHandler(BaseHandler):
+    @tornado.web.authenticated
+    #if not self.current_user: self.redirect()
     def get(self, *args, **kwargs):
         self.render('index.html')
 

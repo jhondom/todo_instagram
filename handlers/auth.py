@@ -3,6 +3,7 @@ from tornado.web import RequestHandler
 from utils.account import HashSecret
 from handlers import main
 from pycket.session import SessionMixin
+from utils.account import UserInfoList
 
 #登录:
 class LoginHandler(main.BaseHandler):
@@ -36,7 +37,13 @@ class SignUpHandler(main.BaseHandler):
         self.render('signup.html')
 
     def post(self, *args, **kwargs):
-        pass
+        username = self.get_body_argument('username',None)
+        password = self.get_body_argument('password', None)
+        confirmpassword = self.get_body_argument('confirmpassword',None)
+        email = self.get_body_argument('email',None)
+        if username != UserInfoList['name'] and password == confirmpassword:
+            self.write('SignUp Success')
+            pass
 
 
 

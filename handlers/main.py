@@ -4,6 +4,8 @@ from tornado.web import RequestHandler
 from utils import makephoto
 import pycket
 from pycket.session import SessionMixin
+from utils import makephoto
+
 
 class BaseHandler(RequestHandler,SessionMixin):
     def get_current_user(self):
@@ -18,7 +20,8 @@ class IndexHandler(BaseHandler):
     @tornado.web.authenticated
     #if not self.current_user: self.redirect()
     def get(self, *args, **kwargs):
-        self.render('index.html')
+        posts = makephoto.get_posts()
+        self.render('index.html',posts =posts)
 
 
 class ExplorerHandler(RequestHandler):
@@ -27,12 +30,15 @@ class ExplorerHandler(RequestHandler):
         self.render('explorer.html',num = num)
 
 
-class PostHandler(RequestHandler):
+class PostHandler(BaseHandler):
+    @tornado.web.authenticated
     def get(self,post_id,*args, **kwargs):
-        self.render('post.html',post_id= post_id)
+        posts = makephoto.get_posts()
+        self.render('post.html',posts= posts)
 
 
-class UploadHandler(RequestHandler):
+class UploadHandler(BaseHandler):
+    @tornado.web.authenticated
     def get(self, *args, **kwargs):
         self.render('upload.html')
     def post(self, *args, **kwargs):
@@ -47,6 +53,8 @@ class UploadHandler(RequestHandler):
             filepath = os.path.join(upload_path,filename)
             with open(filepath,'wb') as f:
                 f.write(img['body'])
+            makephoto.add_post(self.current_user,filepath)
+            #makephoto.make_images(filepath)
         #self.write('uploads done.')
         self.redirect(r'/explorer')
 

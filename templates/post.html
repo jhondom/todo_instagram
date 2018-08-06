@@ -5,6 +5,10 @@
     <title>Title</title>
 </head>
 <body>
-<img src="{{ static_url('images/{}.jpg'.format(post_id)) }}" alt="">
+{% posts.id %}
+<a href="/post/{{ posts.id }}">
+    <img src="{{ post.image_url }}" alt="">
+    </a>
+{% end for %}
 </body>
 </html>

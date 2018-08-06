@@ -39,7 +39,7 @@ class LogoutHandler(main.BaseHandler):
 
 
 
-#注册:
+#用户注册:
 class SignUpHandler(main.BaseHandler):
     def get(self, *args, **kwargs):
         self.render('signup.html')

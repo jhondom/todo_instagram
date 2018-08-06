@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="WebServers">
+    <option name="servers">
+      <webServer id="ssh://pyvip@10.11.33.153:22/home/pyvip/.virtualenvs/todo/bin/python3" name="project_too">
+        <fileTransfer host="10.11.33.82" port="22" rootFolder="/home/pyvip/.virtualenvs/ws/todo" accessType="SFTP">
+          <option name="port" value="22" />
+        </fileTransfer>
+      </webServer>
+    </option>
+  </component>
+</project>

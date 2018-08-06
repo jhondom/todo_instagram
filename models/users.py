@@ -9,8 +9,8 @@ from sqlalchemy.orm import relationship
 class User(BASE):
     __tablename__ = 'user'
     id = Column(Integer,primary_key=True,autoincrement=True)
-    name = Column(String(30),nullable=False)
-    password = Column(String(30), nullable=False)
+    name = Column(String(100),nullable=False)
+    password = Column(String(100), nullable=False)
     lastlogin = Column(DateTime, default=datetime.now())
     createtime = Column(DateTime,default=datetime.now())
 
@@ -44,10 +44,14 @@ class User(BASE):
 class PostFile(BASE):
     __tablename__ = 'posts'
     id = Column(Integer,primary_key=True,autoincrement=True)
-    image_url = Column(String(60), nullable=False)
+    image_url = Column(String(200), nullable=False)
+    thumb_url = Column(String(200), nullable=False)
     userid = Column(Integer,ForeignKey(User.id))
     createtime = Column(DateTime,default=datetime.now())
     user = relationship('User',backref = 'posts',uselist = False)
 
     def __repr__(self):
          return '<PostFile(#{}{}{})>'.format(self.id,self.image_url,self.userid)
+
+
+

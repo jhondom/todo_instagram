@@ -6,9 +6,9 @@
 </head>
 <body>
 
-{% for i in range(1,num+1) %}
-<a href="/post/{{ i }}">
-    <img src="{{ static_url('images/uploads/upload{}.png'.format(i)) }}" alt="">
+{% for p in posts %}
+<a href="/post/{{ p.id }}">
+    <img src="{{ p.thumb_url }}" alt="">
 </a>
 {% end for %}
 

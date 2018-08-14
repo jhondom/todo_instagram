@@ -1,14 +1,22 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Title</title>
-</head>
-<body>
-{% posts.id %}
-<a href="/post/{{ posts.id }}">
-    <img src="{{ post.image_url }}" alt="">
-    </a>
-{% end for %}
-</body>
-</html>
+
+{% extends 'base.html' %}
+
+{% block title %}详情页{% end %}
+
+{% block content %}
+
+post of {{ post.id }}content
+<br>
+<img src="{{ post.image_url }}" alt="">
+<div class="row">
+    <div class="col">
+        <span class="h4">由{{ post.user.name }} 用户上传</span>
+        {% if users %}
+            <span class="h4">将该图片标记为喜欢的用户[{{ len(users) }}]位:</span>
+            {% for u in users %}
+            <a href="/profile?name={{ u.name }}">{{ u.name }}</a>
+            {% end for %}
+        {% end if %}
+    </div>
+</div>
+{% end %}

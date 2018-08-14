@@ -19,7 +19,7 @@ from handlers import main
 import os
 import tornado.options
 from tornado.options import define,options
-from handlers import auth
+from handlers import auth,chat,service
 import redis
 
 BASE_DIRS = os.path.dirname(__file__)
@@ -52,9 +52,13 @@ class Application(tornado.web.Application):
             ('/explorer',main.ExplorerHandler),
             ('/post/(?P<post_id>[0-9]+)',main.PostHandler),
             ('/upload',main.UploadHandler),
+            (r'/profile',main.ProfileHandler),
             (r'/login',auth.LoginHandler),
             (r'/logout',auth.LogoutHandler),
-            (r'/signup',auth.SignUpHandler)
+            (r'/signup',auth.SignUpHandler),
+            (r'/chat',chat.RoomHandler),
+            (r'/save',service.SyncSaveUrlHandler),
+            (r'/saves',service.AsyncSaveUrlHandler)
         ]
 
         settings ={

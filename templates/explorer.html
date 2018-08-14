@@ -1,17 +1,15 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Explorer Page</title>
-</head>
-<body>
 
+
+{% extends 'base.html' %}
+
+{% block title %}index page{% end %}
+
+{% block content %}
+<br>
 {% for p in posts %}
 <a href="/post/{{ p.id }}">
     <img src="{{ p.thumb_url }}" alt="">
 </a>
 {% end for %}
-
-</body>
-</html>
-
+<br>
+{% end %}

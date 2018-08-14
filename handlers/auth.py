@@ -18,12 +18,13 @@ class LoginHandler(main.BaseHandler):
         passinto = HashSecret(username,password)
         print(username)
         print(password)
+        print('the next url is:',next_url)
         print('the hash password is {}:'.format(passinto))
 
         if passinto:
             self.session.set('ID',username)    #登录session设置的ID与main.BaseHandler的self.session.get的ID相同才能使用.
             if next_url:
-                self.render(next_url)
+                self.redirect(next_url)
             else:
                 self.redirect(r'/index')
         else:

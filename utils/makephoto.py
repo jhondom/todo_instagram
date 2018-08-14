@@ -1,7 +1,7 @@
 import glob
 import os,uuid,string
 from PIL import Image
-from models.users import PostFile
+from models.users import PostFile,User,Like
 from models.connect import session
 from models import users
 
@@ -89,7 +89,7 @@ class UploadFile(object):
 
 #图片保存到数据库
 def add_post(username,img_url,thumb_url):
-    user = session.query(users.User).filter_by(name =username).first()
+    user = session.query(User).filter_by(name =username).first()
     post = PostFile(userid =user.id,image_url=img_url,thumb_url=thumb_url)
     session.add(post)
     session.commit()
@@ -106,6 +106,14 @@ def get_post(post_id):
 
 #按用户id展示图片
 def get_post_for(username):
-    id = session.query(users.User).filter_by(name = username).scalar()
-    posts = session.query(PostFile).filter_by(id = id).scalar()
+    user = session.query(User).filter_by(name = username).scalar()
+    # posts = session.query(PostFile).filter_by(id = id).scalar()
+    return user.posts
+
+#获取用户收藏的文件
+def get_like_posts(user_id):
+    posts = session.query(PostFile).filter(Like.user_id == user_id ,PostFile.id == Like.post_id,PostFile.userid != user_id).all()
     return posts
+
+def get_like_users(post_id):
+    return session.query(User).filter(Like.post_id == post_id,User.id == Like.user_id).all()

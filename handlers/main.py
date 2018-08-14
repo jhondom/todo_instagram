@@ -5,6 +5,7 @@ from utils import makephoto
 import pycket
 from pycket.session import SessionMixin
 from utils import makephoto
+from models.users import User
 
 
 class BaseHandler(RequestHandler,SessionMixin):
@@ -34,7 +35,8 @@ class PostHandler(BaseHandler):
     @tornado.web.authenticated
     def get(self,post_id,*args, **kwargs):
         post = makephoto.get_post(post_id)
-        self.render('post.html',post = post)
+        users = makephoto.get_like_users(post.id)
+        self.render('post.html',post = post,users = users)
 
 
 # class UploadHandler(BaseHandler):
@@ -84,6 +86,26 @@ class UploadHandler(BaseHandler):
         self.redirect(r'/explorer')
 
 
+
+#用户中心用户信息
+class ProfileHandler(BaseHandler):
+    @tornado.web.authenticated
+    # 获取URL数据:get_argument可以获取 URL (查询字符串)中的参数
+    def get(self):
+        # name = self.get_argument('name',None)
+        # print('Get Name:',name)
+        # if not name:
+        name = self.current_user
+        print('current_user:',name)
+        user = User.get_user(name)
+        print('Get User:', user)
+        if not user:
+            self.set_status(404)
+            self.write('username error!')
+        else:
+            like_posts = makephoto.get_like_posts(user.id)
+            print(like_posts)
+            self.render('profile.html',user = user,like_posts = like_posts)
 
 
 

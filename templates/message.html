@@ -1,0 +1,5 @@
+<div class="message" id="m{{ message['id'] }}">
+    <!--linkify生成一个链接,但是要注意模板转义-->
+    {% module linkify(message['body']) %}
+</div>
+
